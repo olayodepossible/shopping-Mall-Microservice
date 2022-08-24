@@ -1,0 +1,19 @@
+
+7
+java:S1170"!Make this final field static too.(À¹˜ƒ
+<
+java:S1170"!Make this final field static too.(½Å•²þÿÿÿÿ
+<
+java:S1170"!Make this final field static too.(Â¶Þ¸øÿÿÿÿ
+7
+java:S1170"!Make this final field static too.(Æý‚’
+6
+java:S1170"!Make this final field static too.(Í€µX
+<
+java:S1170"!Make this final field static too.(ñ×³‚ýÿÿÿÿ
+M
+java:S1854""7Remove this useless assignment to local variable "uri".(Œ¬¬÷
+>
+java:S1481""(Remove this unused "uri" local variable.(Œ¬¬÷
+M	java:S106E"9Replace this use of System.out or System.err by a logger.(°Ÿ÷a
+M	java:S106L"9Replace this use of System.out or System.err by a logger.(°Ÿ÷a

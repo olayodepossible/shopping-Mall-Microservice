@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ApiGateway/ApiGateway.iml" filepath="$PROJECT_DIR$/ApiGateway/ApiGateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClientApplication/ClientApplication.iml" filepath="$PROJECT_DIR$/ClientApplication/ClientApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ConfigServer/ConfigServer.iml" filepath="$PROJECT_DIR$/ConfigServer/ConfigServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerService/CustomerService.iml" filepath="$PROJECT_DIR$/CustomerService/CustomerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EurekaServer/EurekaServer.iml" filepath="$PROJECT_DIR$/EurekaServer/EurekaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProductService1/ProductService.iml" filepath="$PROJECT_DIR$/ProductService1/ProductService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProductService2/ProductService (1).iml" filepath="$PROJECT_DIR$/ProductService2/ProductService (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProductService3/ProductService (2).iml" filepath="$PROJECT_DIR$/ProductService3/ProductService (2).iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SWA_ShoppingApp_Microservices.iml" filepath="$PROJECT_DIR$/.idea/SWA_ShoppingApp_Microservices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShoppingService/ShoppingService.iml" filepath="$PROJECT_DIR$/ShoppingService/ShoppingService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShoppingServiceQuery/ShoppingServiceQuery.iml" filepath="$PROJECT_DIR$/ShoppingServiceQuery/ShoppingServiceQuery.iml" />
+    </modules>
+  </component>
+</project>
