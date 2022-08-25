@@ -1,12 +1,12 @@
 
 
-How to run the archtecture:
+How to run the architecture:
 
 
-1. Run all the Microservices in IntelliJ, 11 of them. And open Eureka in browser to see which one is running: http://localhost:8761
+1. Run all the Microservices in any IDE of your choice. And open Eureka in browser to monitor the running status of each services: http://localhost:8761
 
 2. Create Mongo DB (MngoDb compass) for each Microservices (5):
-	productServiceDB, customerServiceDB, shoppingServiceCommandDB, shoppingServiceQueryDB, 		orderServiceDB
+	productServiceDB, customerServiceDB, shoppingServiceCommandDB, shoppingServiceQueryDB, orderServiceDB and vendorServiceDB
 
 3. Install Kafka from the internet and navigate to the folder:
 	How to start Kafka
@@ -20,12 +20,9 @@ How to run the archtecture:
 
 		sh bin/kafka-server-start.sh config/server.properties
 
-4. If you want to trace requests, 
-download zipkin and navigate to the folder and run this in terminal:
+4. Download zipkin for service request tracing
 
-	 java -jar zipkin-server-1.30.3-exec.jar
-
-- Then you may see the entire architecture on the browser:  http://localhost:9411/zipkin 
+- Then see the entire architecture on the browser:  http://localhost:9411/zipkin 
 
 5. Test the api's from Client Application, or postman.
 
