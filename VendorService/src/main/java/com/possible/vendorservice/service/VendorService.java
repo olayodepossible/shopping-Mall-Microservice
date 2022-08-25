@@ -1,11 +1,9 @@
 package com.possible.vendorservice.service;
 
-import com.possible.vendorservice.domain.Customer;
-import com.possible.vendorservice.repository.CustomerRepository;
+import com.possible.vendorservice.domain.Vendor;
+import com.possible.vendorservice.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 
 import java.util.List;
 import java.util.Optional;
@@ -14,29 +12,31 @@ import java.util.Optional;
 public class VendorService {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private VendorRepository vendorRepository;
 
-    public Customer saveCustomer(Customer customer){
+    public Vendor saveVendor(Vendor Vendor) {
 
-        return customerRepository.save(customer);
-
-    }
-    public Customer updateCustomer(Customer customer){
-        return customerRepository.save(customer);
+        return vendorRepository.save(Vendor);
 
     }
-    public  void deleteCustomer(String customerId){
 
-        customerRepository.deleteById(customerId);
+    public Vendor updateVendor(Vendor Vendor) {
+        return vendorRepository.save(Vendor);
 
     }
-    public Optional<Customer> findById(String customerId)
-    {
-        return customerRepository.findById(customerId);
+
+    public void deleteVendor(String VendorId) {
+
+        vendorRepository.deleteById(VendorId);
+
     }
 
-    public List<Customer>  findAll(){
-        return customerRepository.findAll();
+    public Optional<Vendor> findById(String VendorId) {
+        return vendorRepository.findById(VendorId);
+    }
+
+    public List<Vendor> findAll() {
+        return vendorRepository.findAll();
     }
 
 }

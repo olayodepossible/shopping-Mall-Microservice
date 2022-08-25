@@ -1,4 +1,4 @@
-package com.possible.vendorService.domain;
+package com.possible.vendorservice.domain;
 
 public enum Gender {
     MALE, FEMALE, OTHERS

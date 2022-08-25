@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.possible</groupId>
-	<artifactId>vendorService</artifactId>
+	<artifactId>vendorservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>VendorService</name>
 	<description>VendorService</description>

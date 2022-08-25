@@ -1,8 +1,7 @@
-package com.possible.vendorService.domain;
+package com.possible.vendorservice.domain;
 
 
 import lombok.*;
-
 
 @Getter
 @Setter
@@ -14,4 +13,6 @@ public class Address {
     private String city;
     private String zip;
     private String country;
+    private int latitude;
+    private int longitude;
 }
