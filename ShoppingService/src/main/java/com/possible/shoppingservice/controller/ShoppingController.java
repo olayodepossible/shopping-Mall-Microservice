@@ -38,11 +38,8 @@ public class ShoppingController {
             Product product1 = shoppingService.addProductToAShoppingCart(customerId,product,quantity);
             return new ResponseEntity<>(product1,HttpStatus.OK);
         }
-        else{
-            return new ResponseEntity<ProductOutOfStockError>(
-                    new ProductOutOfStockError("Product with this "+
-                            product +" doesn't exist or out of stock"),HttpStatus.NOT_FOUND);
-        }
+
+        return new ResponseEntity<>(Product.builder().productNumInStock(0).build(), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/removeProductFromCartWithQuantity/{customerId}/product/{productId}/quantity/{quantity}")
@@ -63,12 +60,12 @@ public class ShoppingController {
     }
 
     @PostMapping("/checkout/{customerId}")
-    public ResponseEntity<?> checkoutCart(@PathVariable String customerId){
+    public ResponseEntity<Order> checkoutCart(@PathVariable String customerId){
         List<CartLine> cartLines =  shoppingService.checkoutCart(customerId);
-        log.info("Kall is  talking: {}\n", cartLines);
+        log.info("****** CART LINES **********: \n {}", cartLines);
         Order order = shoppingFeignClient.createOrder(cartLines);
         shoppingService.removeCartLine(customerId);
-
+        log.info("ODER RETURNED ******************\n{}", order);
         return new ResponseEntity<>(order,HttpStatus.OK);
 
     }

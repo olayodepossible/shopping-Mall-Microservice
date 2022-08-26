@@ -23,7 +23,7 @@ public class Listener {
     @KafkaListener(topics = {"shoppingCommand"})
     public void handleListener(@Payload String messageString){
         ObjectMapper objectMapper = new ObjectMapper();
-        log.info("Kafka Message in ShoppingService: {}", messageString);
+        log.info("Kafka Message in ShoppingQueryService: {}", messageString);
 
         try {
           Message message = objectMapper.readValue(messageString , Message.class);
@@ -36,10 +36,8 @@ public class Listener {
                 shoppingService.addShoppingCart(cart);
             }
              if(message.getCommand().equals("addProductAndQuantity")){
-                 Message<CustomerProductQuantityDTO> messageAddProductAndQuality = objectMapper.readValue(messageString  ,
-                         new TypeReference<>() {
-                         }
-                 );
+                 Message<CustomerProductQuantityDTO> messageAddProductAndQuality =
+                         objectMapper.readValue(messageString, new TypeReference<>() {});
 
                  CustomerProductQuantityDTO customerProductQuantityDTO1 = messageAddProductAndQuality.getMessage();
                 shoppingService.addProductToAShoppingCart(

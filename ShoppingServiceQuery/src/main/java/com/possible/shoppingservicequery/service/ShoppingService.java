@@ -79,7 +79,7 @@ public class ShoppingService {
     }
 
     public void removeCartLine(String customerId){
-        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
+        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
         shoppingCart.setCartLineList(new ArrayList<>());
         shoppingRepository.save(shoppingCart);
     }

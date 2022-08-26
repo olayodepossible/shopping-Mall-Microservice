@@ -2,10 +2,12 @@ package com.possible.shoppingservice.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class Sender {
 
@@ -17,7 +19,7 @@ public class Sender {
 
         try {
             String stringMessage= objectMapper.writeValueAsString(message);
-            System.out.println("Sending message");
+            log.info("******************************Sending message from Shopping-Service ************************\n");
             kafkaTemplate.send("shoppingCommand",stringMessage);
         }
         catch (JsonProcessingException e) {

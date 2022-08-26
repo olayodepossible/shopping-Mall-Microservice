@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Integer getProductNumInStock(String productNumber) {
         Product product= productRepository.findById(productNumber).orElse(null);
-        if(product==null) return 0; //handle exception
+        if(product==null) return 0;
         return product.getProductNumInStock();
     }
 

@@ -19,7 +19,7 @@ import java.util.Objects;
 @SpringBootApplication
 public class ClientApplication implements CommandLineRunner{
     @Lazy
-@Autowired
+    @Autowired
     Client client;
 
     private final String baseUrl = "http://localhost:8080";
@@ -97,24 +97,27 @@ public class ClientApplication implements CommandLineRunner{
         if (saveVendor != null) {
             id = saveVendor.getId();
         }
+        log.info("=============RETURNED VENDOR ID...============={}\n", saveVendor.getId());
         Product product =  Product.builder()
-                .productDescription("Low Sugar")
-                .productFlavour(Flavour.BANANA)
                 .productName("Ban-creamy")
+                .productLogo("logo1.jpg")
+                .productFlavour(Flavour.BANANA)
                 .productPrice(2000.0)
-                .productNumInStock(10)
                 .vendorId(id)
+                .productDescription("Low Sugar")
+                .productNumInStock(10)
                 .build();
         Product savedProduct1 = client.addProduct(product);
 
         log.info("=============adding Product: Samsung 21...=============");
         Product product2 =  Product.builder()
-                .productDescription("Full Malt")
-                .productFlavour(Flavour.CHOCOLATE)
                 .productName("Choco-Choco")
+                .productLogo("logo.jpg")
+                .productFlavour(Flavour.CHOCOLATE)
                 .productPrice(3000.0)
-                .productNumInStock(10)
                 .vendorId(id)
+                .productDescription("Full Malt")
+                .productNumInStock(10)
                 .build();
         Product savedProduct2 = client.addProduct(product2);
 
@@ -157,25 +160,26 @@ public class ClientApplication implements CommandLineRunner{
 //        restTemplate().delete(baseUrl+ "/cart/removeProductFromCart/"+customer1.getId()+"/product/"+product2.getProductNumInStock(), Void.class);
 //
 //        //Change the quantity of one of the products
-//        int quantity2= 1;
+//        int quantity2= 101;
 //        restTemplate().delete(baseUrl+"/cart/removeProductFromCartWithQuantity/"+customer1.getId()+"/product/"+savedProduct1.getProductNumInStock()+"/quantity/"+quantity2, savedProduct1, Product[].class);
+
 //
-//
-//        log.info("Retrieve and show the shoppingcart\n{}",restTemplate().getForObject(baseUrl+"/cartQuery/getShoppingCart/"+customer1.getId(), ShoppingCart.class));
+        log.info("************Retrieve and show the shopping cart****************\n{}",restTemplate().getForObject(baseUrl+"/cartQuery/getShoppingCart/"+customer1.getId(), ShoppingCart.class));
 //
 //        log.info("============= Checkout and place an order =============");
 //
-//        Order order = restTemplate().postForObject(baseUrl+"/cart/checkout/"+customer1.getId(),null, Order.class);
-////
-////        //Order placed
-//        log.info("============= Placing an order .... =============");
-//        restTemplate().postForObject(baseUrl+"/order/placeOrder/orderNumber/" + order.getOrderNumber(),customer1, Void.class);
+        Order order = restTemplate().postForObject(baseUrl+"/cart/checkout/"+customer1.getId(),null, Order.class);
+        log.info("============= Order NUMBER .... ============={}\n", order);
 //
+//        //Order placed
+        log.info("============= Placing an order .... =============");
+        restTemplate().postForObject(baseUrl+"/order/placeOrder/orderNumber/"+order.getOrderId(),customer1, Void.class);
+
 //        log.info("============= Getting shopping cart (should be empty) After placing order .... =============");
 //        log.info("{}",restTemplate().getForObject(baseUrl+"/cartQuery/getShoppingCart/"+ customer1.getId(), ShoppingCart.class));
-//
-//        log.info("============= Get all order =============");
-//        log.info("{}", restTemplate().getForObject(baseUrl+"/order/getOrders", Order[].class));
+
+        log.info("============= Get all order =============");
+        log.info("{}", restTemplate().getForObject(baseUrl+"/order/getOrders", Order[].class));
 
     }
 

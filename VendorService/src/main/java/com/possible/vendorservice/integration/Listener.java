@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Listener {
 
-    @KafkaListener(topics = {"placeOrderTopic"})
+    @KafkaListener(topics = {"vendorTopic"})
     public void receive(String messageString) {
         ObjectMapper objectMapper = new ObjectMapper();
         log.info("Kafka Message received by VendorService {}", messageString);

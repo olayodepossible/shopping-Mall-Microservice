@@ -41,6 +41,7 @@ public class OrderService {
     }
 
     public void placeOrder(String orderId , Customer customer){
+        log.info("ORDER NUMBER ************{}", orderId);
         Order order = orderRepository.findByOrderId(orderId).orElseThrow(()-> new RuntimeException("Order not found"));
         log.info("1-{}", order);
         order.setCustomer(customer);

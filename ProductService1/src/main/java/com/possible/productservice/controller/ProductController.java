@@ -55,8 +55,8 @@ public class ProductController {
 
     @GetMapping("/{productNumber}/isInStock")
     public ResponseEntity<Boolean> productIsInStock(@PathVariable String productNumber){
-        logger.info("Calling get product in stock");
-        if (productService.getProductNumInStock(productNumber)>0) return ResponseEntity.ok(true);
+        logger.info("Calling to check product is in stock");
+        if (productService.getProductNumInStock(productNumber) > 0) return ResponseEntity.ok(true);
         return ResponseEntity.ok(false);
     }
 

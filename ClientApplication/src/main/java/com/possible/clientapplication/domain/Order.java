@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
 
-    private String orderNumber;
+    private String orderId;
     private Customer customer;
     private List<OrderLine> orderLineList;
 
