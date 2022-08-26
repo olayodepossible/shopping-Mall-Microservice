@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface ClientInterface {
 
-    public void addProduct(Product product);
+    public Product addProduct(Product product);
+//    public void addProduct(Product product);
     public Product modifyProduct(Product product ,String productId);
 
     public List<Product> getProducts();

@@ -2,13 +2,12 @@ package com.possible.productservice.service;
 
 import com.possible.productservice.domain.OrderLine;
 import com.possible.productservice.domain.Product;
-import com.possible.productservice.domain.Products;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Products getAllProducts();
+    List<Product> getAllProducts();
     Product getProductById(String productNumber);
     Product addProduct(Product product);
     void deleteProductById(String productNumber);

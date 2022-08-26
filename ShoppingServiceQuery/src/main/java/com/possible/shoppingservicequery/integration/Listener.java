@@ -31,7 +31,9 @@ public class Listener {
 
             if(message.getCommand().equals("addCart")){
                 String customerId = (String) message.getMessage();
-                shoppingService.addShoppingCart(new ShoppingCart(customerId));
+                ShoppingCart cart = new ShoppingCart();
+                cart.setCustomerId(customerId);
+                shoppingService.addShoppingCart(cart);
             }
              if(message.getCommand().equals("addProductAndQuantity")){
                  Message<CustomerProductQuantityDTO> messageAddProductAndQuality = objectMapper.readValue(messageString  ,

@@ -7,7 +7,9 @@ import com.possible.shoppingservicequery.repository.ShoppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ShoppingService {
@@ -21,43 +23,64 @@ public class ShoppingService {
 
     public void addProductToAShoppingCart(String customerId, Product product, Integer quantity){
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
+        List<CartLine> cartLineList = shoppingCart.getCartLineList();
 
-        shoppingCart.addProduct(product,quantity);
+        for(CartLine cartLine  : cartLineList){
+            if(cartLine.getProduct().equals(product)){
+                cartLine.changeQuantity(cartLine.getQuantity() + quantity);
+                return;
+            }
+        }
+        cartLineList.add(new CartLine(product,quantity));
         shoppingRepository.save(shoppingCart);
     }
 
-    public void removeProductWithQuantity(String customerId , Product product , Integer quantity){
+    public boolean removeProductWithQuantity(String customerId , Product product , Integer quantity){
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
+        List<CartLine> cartLineList = shoppingCart.getCartLineList();
 
-        shoppingCart.removeProduct(product,quantity);
+        CartLine cartLine2= null;
+        for(CartLine cartLine : cartLineList){
+            if(cartLine.getProduct().equals(product) && cartLine.getQuantity() > quantity ){
+                cartLine.changeQuantity(cartLine.getQuantity() - quantity);
+                return true;
+            }
+            else if(cartLine.getProduct().equals(product) && cartLine.getQuantity() <= quantity ){
+                cartLineList.remove(cartLine);
+                return false;
+            }
+            else{
+                cartLine2=cartLine;
+            }
+        }
+        cartLineList.remove(cartLine2);
         shoppingRepository.save(shoppingCart);
+        return true;
     }
 
     public void removeAllProduct(String customerId , Product product ){
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
+        List<CartLine> cartLineList = shoppingCart.getCartLineList();
 
-        CartLine cartLine = null;
-
-        for(CartLine cartLine2 : shoppingCart.getCartLineList()){
+        for(CartLine cartLine2 : cartLineList){
             if(cartLine2.getProduct().equals(product)){
-                cartLine = cartLine2;
+                cartLineList.remove(cartLine2);
+                return;
             }
         }
-
-        shoppingCart.removeAllProduct(cartLine);
 
         shoppingRepository.save(shoppingCart);
     }
 
     public List<CartLine> viewShoppingCart(String customerId){
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
-        return shoppingCart.viewShoppingCart();
+        return shoppingCart.getCartLineList();
 
     }
 
     public void removeCartLine(String customerId){
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
-        shoppingCart.removeCartLineList();
+        shoppingCart.setCartLineList(new ArrayList<>());
         shoppingRepository.save(shoppingCart);
     }
 

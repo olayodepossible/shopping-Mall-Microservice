@@ -3,7 +3,6 @@ package com.possible.productservice.service.impl;
 import com.possible.productservice.domain.OrderLine;
 import com.possible.productservice.exception.ProductNotfoundException;
 import com.possible.productservice.domain.Product;
-import com.possible.productservice.domain.Products;
 import com.possible.productservice.repository.ProductRepository;
 import com.possible.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ public class ProductServiceImpl implements ProductService {
     private static final String PRODUCT_NOT_FOUND = "Product not found";
 
     @Override
-    public Products getAllProducts() {
-        return new Products(productRepository.findAll());
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @Override

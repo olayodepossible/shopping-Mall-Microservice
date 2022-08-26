@@ -22,7 +22,7 @@ public class Customer {
     private String phone;
     private String email;
     private Address address;
-    private Gender status;
+    private Gender gender;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

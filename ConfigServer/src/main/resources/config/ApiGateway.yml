@@ -15,7 +15,11 @@ spring:
       - id: customerService
         uri: lb://customerService
         predicates:
-        - Path=/customer/**
+        - Path=/customers/**
+      - id: vendorService
+        uri: lb://vendorService
+        predicates:
+        - Path=/vendor/**
       - id: ShoppingServiceCommand
         uri: lb://ShoppingServiceCommand
         predicates:

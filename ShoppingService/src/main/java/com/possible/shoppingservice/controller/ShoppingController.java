@@ -26,20 +26,17 @@ public class ShoppingController {
     private ProductFeignClient productFeignClient;
 
     @PostMapping("/addCartForACustomer/{customerId}")
-    public ResponseEntity<?> addShoppingCartForCustomer(@PathVariable String customerId){
+    public ResponseEntity<ShoppingCart> addShoppingCartForCustomer(@PathVariable String customerId){
 
-        ShoppingCart shoppingCart =  shoppingService.addShoppingCart(customerId);
-
-        return new ResponseEntity<ShoppingCart>(shoppingCart,HttpStatus.OK);
+        return new ResponseEntity<>(shoppingService.addShoppingCart(customerId),HttpStatus.OK);
     }
 
     @PostMapping("/addProductToCartWithQuantity/{customerId}/quantity/{quantity}")
-    public ResponseEntity<?> addProductToShoppingCart(@PathVariable String customerId ,
-            @PathVariable Integer quantity
+    public ResponseEntity<Product> addProductToShoppingCart(@PathVariable String customerId , @PathVariable Integer quantity
             , @RequestBody Product product){
         if(productFeignClient.checkProductInStock(product.getProductId())){
             Product product1 = shoppingService.addProductToAShoppingCart(customerId,product,quantity);
-            return new ResponseEntity<Product>(product1,HttpStatus.OK);
+            return new ResponseEntity<>(product1,HttpStatus.OK);
         }
         else{
             return new ResponseEntity<ProductOutOfStockError>(

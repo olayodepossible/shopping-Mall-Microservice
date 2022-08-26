@@ -2,13 +2,14 @@ package com.possible.productservice.controller;
 
 
 import com.possible.productservice.domain.Product;
-import com.possible.productservice.domain.Products;
 import com.possible.productservice.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -22,7 +23,7 @@ public class ProductController {
             LoggerFactory.getLogger(ProductController.class.getName());
 
     @GetMapping
-    public ResponseEntity<Products> getAllProducts(){
+    public ResponseEntity<List<Product>> getAllProducts(){
         logger.info("Calling get all Products");
         return ResponseEntity.ok(productService.getAllProducts());
     }

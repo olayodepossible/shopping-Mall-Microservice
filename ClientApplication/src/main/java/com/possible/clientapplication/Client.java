@@ -17,7 +17,10 @@ import java.util.Objects;
 @Service
 public class Client implements ClientInterface {
 
-    @Autowired
+    public Client(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     private RestTemplate restTemplate;
 
     private final String baseProductUrl = "http://localhost:8080/products/";
@@ -30,8 +33,10 @@ public class Client implements ClientInterface {
 
 
     @Override
-    public void addProduct(Product product) {
-        URI uri = restTemplate.postForLocation(baseProductUrl, product, Product.class);
+    public Product addProduct(Product product) {
+        log.info("PRODUCT FROM CLIENT ************* {}", product);
+        return restTemplate.postForObject(baseProductUrl, product, Product.class);
+//        return restTemplate.postForLocation(baseProductUrl, product, Product.class);
     }
 
     @Override

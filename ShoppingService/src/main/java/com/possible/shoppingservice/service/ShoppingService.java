@@ -1,7 +1,7 @@
 package com.possible.shoppingservice.service;
 
 import com.possible.shoppingservice.integration.CustomerProductDTO;
-import com.possible.shoppingservice.integration.CustomerProductQualityDTO;
+import com.possible.shoppingservice.integration.CustomerProductQuantityDTO;
 import com.possible.shoppingservice.integration.Message;
 import com.possible.shoppingservice.integration.Sender;
 import com.possible.shoppingservice.model.CartLine;
@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -26,29 +27,36 @@ public class ShoppingService {
 
 
     public ShoppingCart addShoppingCart(String customerId){
-        Message<String> message = new Message<String>(
-                "addCart",
-                customerId
-        );
-       ShoppingCart shoppingCart = shoppingRepository.save(new ShoppingCart(customerId));
+        Message<String> message = new Message<>("addCart", customerId);
+        ShoppingCart cart = new ShoppingCart();
+        cart.setCustomerId(customerId);
+       ShoppingCart shoppingCart = shoppingRepository.save(cart);
 
         sender.send(message);
         return shoppingCart;
     }
 
     public Product addProductToAShoppingCart(String customerId, Product product, Integer quantity){
-        Message<CustomerProductQualityDTO> customerProductQualityDTOMessage =
-                new Message<CustomerProductQualityDTO>(
+        Message<CustomerProductQuantityDTO> customerProductQualityDTOMessage =
+                new Message<CustomerProductQuantityDTO>(
                         "addProductAndQuantity",
-                        new CustomerProductQualityDTO(
+                        new CustomerProductQuantityDTO(
                         customerId,
                         product,
                         quantity)
                 );
-        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).get();
+        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
+        List<CartLine> cartLineList = shoppingCart.getCartLineList();
 
-        shoppingCart.addProduct(product,quantity);
-        log.info("{}", shoppingCart);
+        for(CartLine cartLine  : cartLineList){
+            if(cartLine.getProduct().equals(product)){
+                cartLine.changeQuantity(cartLine.getQuantity() + quantity);
+                return cartLine.getProduct();
+            }
+        }
+        cartLineList.add(new CartLine(product,quantity));
+
+        log.info("*************shoppingCart IN SHOPINGSERVICE*******{}", shoppingCart);
         shoppingRepository.save(shoppingCart);
 
         sender.send(customerProductQualityDTOMessage);
@@ -56,57 +64,53 @@ public class ShoppingService {
 
     }
 
-    public void removeProductWithQuantity(String customerId , String productId , Integer quantity){
+    public boolean removeProductWithQuantity(String customerId , String productId , Integer quantity){
 
-        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).get();
+        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
+        List<CartLine> cartLineList = shoppingCart.getCartLineList();
         Product product = null;
-        for(CartLine cartLine : shoppingCart.getCartLineList()){
+        for(CartLine cartLine : cartLineList){
 
             if(cartLine.getProduct().getProductId().equals(productId)){
-                product = cartLine.getProduct();
-                shoppingCart.removeProduct(cartLine.getProduct(),quantity);
-            }
+                if( cartLine.getQuantity() > quantity ){
+                    cartLine.changeQuantity(cartLine.getQuantity() - quantity);
+                    product = cartLine.getProduct();
+                    return true;
+                }
+                else if(cartLine.getQuantity() <= quantity ){
+                    cartLineList.remove(cartLine);
+                    return false;
+                }
 
+            cartLineList.remove(cartLine);
+            }
         }
-        Message<CustomerProductQualityDTO> customerProductQualityDTOMessage =
-                new Message<CustomerProductQualityDTO>(
+        Message<CustomerProductQuantityDTO> customerProductQualityDTOMessage =
+                new Message<>(
                         "removeProductWithQuality",
-                        new CustomerProductQualityDTO(
-                                customerId,
-                                product,
-                                quantity)
+                        new CustomerProductQuantityDTO(customerId,product,quantity)
                 );
 
         shoppingRepository.save(shoppingCart);
         sender.send(customerProductQualityDTOMessage);
-
+        return true;
     }
 
     public void removeAllProduct(String customerId , String productId ){
 
-
-
-        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).get();
-
-        Product product = null;
+        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
 
         for(CartLine cartLine : shoppingCart.getCartLineList()){
 
             if(cartLine.getProduct().getProductId().equals(productId)){
-                product = cartLine.getProduct();
-                System.out.println();
 
                 shoppingCart.getCartLineList().remove(cartLine);
-                System.out.println("Shopping cart"+ shoppingCart);
+               log.info("Shopping cart in SHOPPING SERVICE{}", shoppingCart);
                 Message<CustomerProductDTO> customerProductQualityDTOMessage =
-                        new Message<CustomerProductDTO>(
+                        new Message<>(
                                 "removeAllProduct",
-                                new CustomerProductDTO(
-                                        customerId,
-                                        product
-                                )
+                                new CustomerProductDTO( customerId,cartLine.getProduct())
                         );
-                //System.out.println("Shopping cart"+ shoppingCart);
                 shoppingRepository.save(shoppingCart);
                 sender.send(customerProductQualityDTOMessage);
                 return;
@@ -114,19 +118,13 @@ public class ShoppingService {
             }
 
         }
-
-
-
     }
 
     public List<CartLine> checkoutCart(String customerId){
 
-        Message<String> message = new Message<String>(
-                "checkout",
-                customerId
-        );
+        Message<String> message = new Message<>("checkout",customerId);
 
-        ShoppingCart cart = shoppingRepository.findByCustomerId(customerId).orElse(new ShoppingCart());
+        ShoppingCart cart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
 
         sender.send(message);
         log.info("This is the list of CartLines : {}", cart.getCartLineList());
@@ -135,9 +133,10 @@ public class ShoppingService {
     }
 
     public void removeCartLine(String customerId){
-        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).get();
-        shoppingCart.removeCartLineList();
+        ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
+        shoppingCart.setCartLineList(new ArrayList<>());
         shoppingRepository.save(shoppingCart);
     }
+
 
 }
