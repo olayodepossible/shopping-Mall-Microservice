@@ -32,14 +32,14 @@ public class ShoppingController {
     }
 
     @PostMapping("/addProductToCartWithQuantity/{customerId}/quantity/{quantity}")
-    public ResponseEntity<Product> addProductToShoppingCart(@PathVariable String customerId , @PathVariable Integer quantity
+    public ResponseEntity<ShoppingCart> addProductToShoppingCart(@PathVariable String customerId , @PathVariable Integer quantity
             , @RequestBody Product product){
         if(productFeignClient.checkProductInStock(product.getProductId())){
-            Product product1 = shoppingService.addProductToAShoppingCart(customerId,product,quantity);
-            return new ResponseEntity<>(product1,HttpStatus.OK);
+            ShoppingCart shoppingCart = shoppingService.addProductToAShoppingCart(customerId, product, quantity);
+            return new ResponseEntity<>(shoppingCart, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(Product.builder().productNumInStock(0).build(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ShoppingCart(), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/removeProductFromCartWithQuantity/{customerId}/product/{productId}/quantity/{quantity}")
@@ -63,7 +63,7 @@ public class ShoppingController {
     public ResponseEntity<Order> checkoutCart(@PathVariable String customerId){
         List<CartLine> cartLines =  shoppingService.checkoutCart(customerId);
         log.info("****** CART LINES **********: \n {}", cartLines);
-        Order order = shoppingFeignClient.createOrder(cartLines);
+        Order order = shoppingFeignClient.createOrder(cartLines, customerId);
         shoppingService.removeCartLine(customerId);
         log.info("ODER RETURNED ******************\n{}", order);
         return new ResponseEntity<>(order,HttpStatus.OK);
@@ -72,8 +72,8 @@ public class ShoppingController {
 
     @FeignClient("OrderService")
     interface ShoppingFeignClient{
-        @PostMapping("/order")
-        Order createOrder(@RequestBody List<CartLine> cartLines);
+        @PostMapping("/order/{customerId}")
+        Order createOrder(@RequestBody List<CartLine> cartLines, @PathVariable String customerId);
 
     }
 

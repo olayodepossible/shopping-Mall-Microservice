@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String phone;
+    @Indexed(unique = true)
     private String email;
     private Address address;
     private Gender status;

@@ -16,7 +16,7 @@ public class Order {
 
     @Id
     private String orderId;
-    private Customer customer;
+    private String customerId;
     private List<OrderLine> orderLineList;
 
 }

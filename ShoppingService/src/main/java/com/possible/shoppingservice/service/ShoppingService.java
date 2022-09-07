@@ -36,9 +36,9 @@ public class ShoppingService {
         return shoppingCart;
     }
 
-    public Product addProductToAShoppingCart(String customerId, Product product, Integer quantity){
+    public ShoppingCart addProductToAShoppingCart(String customerId, Product product, Integer quantity){
         Message<CustomerProductQuantityDTO> customerProductQualityDTOMessage =
-                new Message<CustomerProductQuantityDTO>(
+                new Message<>(
                         "addProductAndQuantity",
                         new CustomerProductQuantityDTO(
                         customerId,
@@ -48,10 +48,11 @@ public class ShoppingService {
         ShoppingCart shoppingCart = shoppingRepository.findByCustomerId(customerId).orElseThrow();
         List<CartLine> cartLineList = shoppingCart.getCartLineList();
 
-        for(CartLine cartLine  : cartLineList){
-            if(cartLine.getProduct().equals(product)){
-                cartLine.changeQuantity(cartLine.getQuantity() + quantity);
-                return cartLine.getProduct();
+        if (!cartLineList.isEmpty()){
+            for(CartLine cartLine  : cartLineList){
+                if(cartLine.getProduct().equals(product)){
+                    cartLine.changeQuantity(cartLine.getQuantity() + quantity);
+                }
             }
         }
         cartLineList.add(new CartLine(product,quantity));
@@ -60,7 +61,7 @@ public class ShoppingService {
         shoppingRepository.save(shoppingCart);
 
         sender.send(customerProductQualityDTOMessage);
-        return product;
+        return shoppingCart;
 
     }
 

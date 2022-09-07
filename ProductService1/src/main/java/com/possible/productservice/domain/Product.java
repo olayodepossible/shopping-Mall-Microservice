@@ -17,7 +17,7 @@ public class Product {
     private String productName;
     private Flavour productFlavour;
     private Double productPrice;
-    private String vendor;
+    private String vendorId;
     private String productDescription;
     private Integer productNumInStock;
     private int rating;

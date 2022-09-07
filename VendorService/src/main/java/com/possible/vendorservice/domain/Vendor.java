@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class Vendor {
     private String firstName;
     private String lastName;
     private String phone;
+    @Indexed(unique = true)
     private String email;
     private String companyName;
     private String companyLogo;

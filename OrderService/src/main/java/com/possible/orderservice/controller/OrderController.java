@@ -1,8 +1,8 @@
 package com.possible.orderservice.controller;
 
 import com.possible.orderservice.model.CartLine;
-import com.possible.orderservice.model.Customer;
 import com.possible.orderservice.model.Order;
+import com.possible.orderservice.model.OrderResponse;
 import com.possible.orderservice.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
     @PostMapping("/placeOrder/orderNumber/{orderNumber}")
-    public void placeOrder(@PathVariable String orderNumber , @RequestBody Customer customer){
-
-        orderService.placeOrder(orderNumber , customer);
-
-
+    public ResponseEntity<OrderResponse> placeOrder(@PathVariable String orderNumber){
+        return new ResponseEntity<>(orderService.placeOrder(orderNumber), HttpStatus.OK);
     }
 
     @GetMapping("/getOrders")
@@ -35,10 +31,9 @@ public class OrderController {
     }
 
 
-    @PostMapping()
-    public ResponseEntity<Order> createOrder(@RequestBody List<CartLine> cartLines){
-        Order order = orderService.createOrder(cartLines);
-        log.info("ORDER RETURNED *****************\n{}", order);
+    @PostMapping("/{customerId}")
+    public ResponseEntity<Order> createOrder(@RequestBody List<CartLine> cartLines, @PathVariable String customerId){
+        Order order = orderService.createOrder(cartLines, customerId);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 }

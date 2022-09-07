@@ -22,7 +22,7 @@ public class ClientApplication implements CommandLineRunner{
     @Autowired
     Client client;
 
-    private final String baseUrl = "http://localhost:8080";
+    private static final String baseUrl = "http://localhost:8080";
 
     @Bean
     public RestTemplate restTemplate(){
@@ -30,17 +30,13 @@ public class ClientApplication implements CommandLineRunner{
     }
 
 
-
     public static void main(String[] args) {
         SpringApplication.run(ClientApplication.class, args);
-
-
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        //create and get cutomers
 
         log.info("============= Create Vendor ... =============");
         Address vendorAddress = Address.builder()
@@ -173,7 +169,7 @@ public class ClientApplication implements CommandLineRunner{
 //
 //        //Order placed
         log.info("============= Placing an order .... =============");
-        restTemplate().postForObject(baseUrl+"/order/placeOrder/orderNumber/"+order.getOrderId(),customer1, Void.class);
+        restTemplate().postForObject(baseUrl+"/order/placeOrder/orderNumber/"+order.getOrderId()+customer1.getId(), null, Void.class);
 
 //        log.info("============= Getting shopping cart (should be empty) After placing order .... =============");
 //        log.info("{}",restTemplate().getForObject(baseUrl+"/cartQuery/getShoppingCart/"+ customer1.getId(), ShoppingCart.class));

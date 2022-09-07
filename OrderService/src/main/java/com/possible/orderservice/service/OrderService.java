@@ -27,7 +27,7 @@ public class OrderService {
             return new ArrayList<>(orderRepository.findAll());
     }
 
-    public Order createOrder(List<CartLine> cartLines){
+    public Order createOrder(List<CartLine> cartLines, String customerId){
 
         Order order = new Order();
         List<OrderLine> orderLineList = new ArrayList<>();
@@ -37,22 +37,15 @@ public class OrderService {
         }
 
         order.setOrderLineList(orderLineList);
+        order.setCustomerId(customerId);
         return orderRepository.save(order);
     }
 
-    public void placeOrder(String orderId , Customer customer){
-        log.info("ORDER NUMBER ************{}", orderId);
+    public OrderResponse placeOrder(String orderId){
         Order order = orderRepository.findByOrderId(orderId).orElseThrow(()-> new RuntimeException("Order not found"));
-        log.info("1-{}", order);
-        order.setCustomer(customer);
-        log.info("2- After setting customer: {}", order);
-
-        List<OrderLine> orderLines = new ArrayList<>(order.getOrderLineList());
-        log.info("3-{}", order);
-
         orderRepository.save(order);
 
-        Message<List<OrderLine>> messageOrderLines = new Message<>("productService" ,orderLines);
+        Message<List<OrderLine>> messageOrderLines = new Message<>("productService" , order.getOrderLineList());
 
         Message<Order> messageOrder = new Message<>("customerService",order);
         log.info("1-order pass to Kafka: {}", order);
@@ -64,5 +57,6 @@ public class OrderService {
 
         //CustomerService receive An Email
         sender.send(messageOrder);
+        return OrderResponse.builder().isSuccess(true).orderCount(order.getOrderLineList().size()).message("Order placed successfully").build();
     }
 }
